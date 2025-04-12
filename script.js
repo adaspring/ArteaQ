@@ -24,26 +24,18 @@ document.addEventListener('click', (event) => {
 // ======================
 // Submenu System
 // ======================
-// Mobile-friendly submenu implementation with larger tap area
+// Advanced submenu function with hybrid second-click behavior
 function initSubmenus() {
     document.querySelectorAll('#flyout-menu > ul > li').forEach(menuItem => {
         const submenu = menuItem.querySelector('.submenu');
         const link = menuItem.querySelector('a');
         
         if (submenu) {
-            // Add arrow with enhanced styling
+            // Add arrow if missing
             if (!menuItem.querySelector('.submenu-arrow')) {
                 const arrow = document.createElement('span');
                 arrow.className = 'submenu-arrow';
                 arrow.innerHTML = '▼';
-                
-                // Make arrow bigger and more tappable
-                arrow.style.fontSize = '1.2em';           // Bigger arrow
-                arrow.style.padding = '10px';             // Larger tap target
-                arrow.style.marginLeft = '5px';           // Add spacing
-                arrow.style.position = 'relative';        // For positioning
-                arrow.style.display = 'inline-block';     // Block element
-                
                 link.appendChild(arrow);
             }
             
@@ -51,34 +43,27 @@ function initSubmenus() {
             let isSubmenuOpen = false;
             
             // First click: Open submenu
-            // Second click: Split functionality (navigation or collapse)
+            // Second click: Split functionality (section navigation or collapse)
             link.addEventListener('click', (e) => {
                 const arrow = menuItem.querySelector('.submenu-arrow');
                 
                 if (!isSubmenuOpen) {
-                    // First click: toggle submenu open
+                    // First click: just toggle submenu open
                     e.preventDefault();
                     submenu.classList.add('active');
                     arrow.classList.add('rotated');
                     isSubmenuOpen = true;
                 } else {
-                    // Second click with split functionality
-                    // Check if arrow was clicked (with padding consideration)
-                    const arrowRect = arrow.getBoundingClientRect();
-                    const clickedOnArrow = (
-                        e.clientX >= arrowRect.left &&
-                        e.clientX <= arrowRect.right &&
-                        e.clientY >= arrowRect.top &&
-                        e.clientY <= arrowRect.bottom
-                    );
-                    
-                    if (clickedOnArrow) {
+                    // Second click: split functionality
+                    // If clicking on arrow, collapse menu
+                    if (e.target === arrow) {
                         e.preventDefault();
                         submenu.classList.remove('active');
                         arrow.classList.remove('rotated');
                         isSubmenuOpen = false;
                     }
-                    // Otherwise, navigation happens (no preventDefault)
+                    // If clicking on the link itself, navigate to the page
+                    // No preventDefault() means follow href
                 }
             });
             
