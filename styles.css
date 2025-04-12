@@ -71,6 +71,9 @@ nav#flyout-menu {
     padding-top: 60px;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
     overflow-y: auto;
+    /* Add these 2 new lines right here */
+    max-height: 100vh;
+    -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
 }
 
 nav#flyout-menu.open {
@@ -124,8 +127,8 @@ nav#flyout-menu .submenu {
 }
 
 nav#flyout-menu .submenu.active {
-    max-height: 60vh;
-    overflow-y: auto;
+    max-height: none; /* Allow submenus to expand to their full height */
+    overflow-y: visible; /* Let content flow naturally */
 }
 
 nav#flyout-menu .submenu li {
@@ -150,6 +153,11 @@ nav#flyout-menu .submenu.active li {
 
 .submenu-arrow.rotated {
     transform: rotate(180deg);
+}
+
+/* Add this new rule */
+nav#flyout-menu > ul {
+    padding-bottom: 50px;
 }
 
 /* ================================================== */
