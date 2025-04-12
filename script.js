@@ -55,15 +55,22 @@ function initSubmenus() {
                     isSubmenuOpen = true;
                 } else {
                     // Second click: split functionality
-                    // If clicking on arrow, collapse menu
-                    if (e.target === arrow) {
+                    // Check if arrow was clicked (with padding consideration)
+                    const arrowRect = arrow.getBoundingClientRect();
+                    const clickedOnArrow = (
+                        e.clientX >= arrowRect.left &&
+                        e.clientX <= arrowRect.right &&
+                        e.clientY >= arrowRect.top &&
+                        e.clientY <= arrowRect.bottom
+                    );
+                    
+                    if (clickedOnArrow) {
                         e.preventDefault();
                         submenu.classList.remove('active');
                         arrow.classList.remove('rotated');
                         isSubmenuOpen = false;
                     }
-                    // If clicking on the link itself, navigate to the page
-                    // No preventDefault() means follow href
+                    // Otherwise, navigation happens (no preventDefault)
                 }
             });
             
