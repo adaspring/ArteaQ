@@ -35,7 +35,8 @@ function initSubmenus() {
             if (!menuItem.querySelector('.submenu-arrow')) {
                 const arrow = document.createElement('span');
                 arrow.className = 'submenu-arrow';
-                arrow.innerHTML = '▼';
+                arrow.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 12L2 6h12L8 12z"/></svg>';
+                //arrow.innerHTML = '▼';
                 link.appendChild(arrow);
             }
             
