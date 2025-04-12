@@ -29,7 +29,7 @@ body.menu-open::after {
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     z-index: 90; /* Below the menu but above other content */
-    pointer-events: auto; /* Capture touch events */
+    pointer-events: none; /* Changed to none to allow clicks to pass through to content */
 }
 
 a {
@@ -62,6 +62,8 @@ header {
     cursor: pointer;
     font-size: 2rem;
     transition: transform 0.3s ease;
+    z-index: 100;
+    pointer-events: auto; /* Ensure this can be clicked */
 }
 
 .hamburger-menu:hover {
@@ -87,6 +89,10 @@ nav#flyout-menu {
     -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
     overscroll-behavior: contain; /* Prevents scroll chaining */
     max-height: 100vh;
+    /* Ensure menu stays in its own layer for rendering */
+    will-change: transform;
+    touch-action: pan-y; /* Allow vertical touch actions */
+    pointer-events: auto; /* Ensure menu can be interacted with */
 }
 
 nav#flyout-menu.open {
@@ -101,6 +107,7 @@ nav#flyout-menu.open {
     cursor: pointer;
     color: #fff;
     transition: transform 0.3s ease;
+    pointer-events: auto; /* Ensure this can be clicked */
 }
 
 .menu-close-btn:hover {
@@ -126,6 +133,7 @@ nav#flyout-menu a {
     color: #a3e0be !important;
     text-decoration: none !important;
     display: block;
+    pointer-events: auto; /* Ensure links can be clicked */
 }
 
 nav#flyout-menu a:hover {
@@ -166,12 +174,13 @@ nav#flyout-menu .submenu.active li {
     margin-left: 10px;
     font-size: 0.7em;
     transition: transform 0.3s ease;
+    pointer-events: auto; /* Ensure this can be clicked */
 }
 
 .submenu-arrow.rotated {
     transform: rotate(180deg);
 }
-
+        
 /* ================================================== */
 /* Breadcrumb */
 /* ================================================== */
