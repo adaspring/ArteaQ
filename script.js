@@ -24,6 +24,7 @@ document.addEventListener('click', (event) => {
 // ======================
 // Submenu System
 // ======================
+// Modified initSubmenus function for two-click navigation
 function initSubmenus() {
     document.querySelectorAll('#flyout-menu > ul > li').forEach(menuItem => {
         const submenu = menuItem.querySelector('.submenu');
@@ -38,11 +39,29 @@ function initSubmenus() {
                 link.appendChild(arrow);
             }
             
-            // Toggle submenu on click
+            // Track if submenu is already open
+            let isSubmenuOpen = false;
+            
+            // Toggle submenu on first click, navigate on second click
             link.addEventListener('click', (e) => {
-                e.preventDefault();
-                submenu.classList.toggle('active');
-                menuItem.querySelector('.submenu-arrow').classList.toggle('rotated');
+                if (!isSubmenuOpen) {
+                    // First click: just toggle submenu
+                    e.preventDefault();
+                    submenu.classList.add('active');
+                    menuItem.querySelector('.submenu-arrow').classList.add('rotated');
+                    isSubmenuOpen = true;
+                }
+                // Second click: let the default link navigation happen
+                // No preventDefault() means the browser will follow the href
+            });
+            
+            // Reset state when menu is closed
+            document.addEventListener('click', (event) => {
+                if (!menuItem.contains(event.target) && isSubmenuOpen) {
+                    isSubmenuOpen = false;
+                    submenu.classList.remove('active');
+                    menuItem.querySelector('.submenu-arrow').classList.remove('rotated');
+                }
             });
         } else {
             // Remove arrows from non-submenu items
