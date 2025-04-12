@@ -24,7 +24,9 @@ document.addEventListener('click', (event) => {
 // ======================
 // Submenu System
 // ======================
-// Advanced submenu function with hybrid second-click behavior
+// We only need to modify the submenu functionality in your script.js
+// Here's the updated initSubmenus function:
+
 function initSubmenus() {
     document.querySelectorAll('#flyout-menu > ul > li').forEach(menuItem => {
         const submenu = menuItem.querySelector('.submenu');
@@ -36,27 +38,25 @@ function initSubmenus() {
                 const arrow = document.createElement('span');
                 arrow.className = 'submenu-arrow';
                 arrow.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 12L2 6h12L8 12z"/></svg>';
-                //arrow.innerHTML = '▼';
                 link.appendChild(arrow);
             }
             
-            // Track state
+            // Track state for this specific menu item
             let isSubmenuOpen = false;
             
-            // First click: Open submenu
-            // Second click: Split functionality (section navigation or collapse)
+            // Toggle submenu on click
             link.addEventListener('click', (e) => {
                 const arrow = menuItem.querySelector('.submenu-arrow');
                 
                 if (!isSubmenuOpen) {
-                    // First click: just toggle submenu open
+                    // First click: toggle submenu open
                     e.preventDefault();
                     submenu.classList.add('active');
                     arrow.classList.add('rotated');
                     isSubmenuOpen = true;
                 } else {
                     // Second click: split functionality
-                    // Check if arrow was clicked (with padding consideration)
+                    // Check if arrow was clicked
                     const arrowRect = arrow.getBoundingClientRect();
                     const clickedOnArrow = (
                         e.clientX >= arrowRect.left &&
@@ -75,20 +75,14 @@ function initSubmenus() {
                 }
             });
             
-            // Reset state when clicking elsewhere
-            document.addEventListener('click', (event) => {
-                if (!menuItem.contains(event.target) && isSubmenuOpen) {
-                    isSubmenuOpen = false;
-                    submenu.classList.remove('active');
-                    menuItem.querySelector('.submenu-arrow').classList.remove('rotated');
-                }
-            });
+            // REMOVED: The document event listener that closes all submenus when clicking elsewhere
+            // This allows multiple submenus to be open at once
         } else {
             // Remove arrows from non-submenu items
             const existingArrow = menuItem.querySelector('.submenu-arrow');
             if (existingArrow) existingArrow.remove();
 
-                        // Handle section anchors within the same page
+            // Handle section anchors within the same page
             link.addEventListener('click', (e) => {
                 const href = link.getAttribute('href');
                 
@@ -114,8 +108,37 @@ function initSubmenus() {
             });
         }
     });
+    
+    // Ensure the flyout menu is always scrollable when content exceeds viewport
+    ensureMenuScrollability();
 }
 
+// Add this new function to ensure menu scrollability
+function ensureMenuScrollability() {
+    const flyoutMenu = document.getElementById('flyout-menu');
+    
+    // Set a maximum height for the menu content to ensure scrollability
+    flyoutMenu.style.maxHeight = '100vh';
+    flyoutMenu.style.overflowY = 'auto';
+    
+    // Add padding at the bottom to ensure all submenus are visible when open
+    const menuContent = flyoutMenu.querySelector('ul');
+    if (menuContent) {
+        menuContent.style.paddingBottom = '50px';
+    }
+}
+
+// Update toggleMenu to ensure scroll position is reset when menu is opened
+function toggleMenu() {
+    const menu = document.getElementById('flyout-menu');
+    menu.classList.toggle('open');
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+    
+    // Reset scroll position when opening the menu
+    if (menu.classList.contains('open')) {
+        menu.scrollTop = 0;
+    }
+}
 // ======================
 // Active Page Highlighting
 // ======================
