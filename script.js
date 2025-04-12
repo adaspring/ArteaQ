@@ -24,7 +24,7 @@ document.addEventListener('click', (event) => {
 // ======================
 // Submenu System
 // ======================
-// Modified initSubmenus function for two-click navigation
+// Advanced submenu function with hybrid second-click behavior
 function initSubmenus() {
     document.querySelectorAll('#flyout-menu > ul > li').forEach(menuItem => {
         const submenu = menuItem.querySelector('.submenu');
@@ -39,23 +39,35 @@ function initSubmenus() {
                 link.appendChild(arrow);
             }
             
-            // Track if submenu is already open
+            // Track state
             let isSubmenuOpen = false;
             
-            // Toggle submenu on first click, navigate on second click
+            // First click: Open submenu
+            // Second click: Split functionality (section navigation or collapse)
             link.addEventListener('click', (e) => {
+                const arrow = menuItem.querySelector('.submenu-arrow');
+                
                 if (!isSubmenuOpen) {
-                    // First click: just toggle submenu
+                    // First click: just toggle submenu open
                     e.preventDefault();
                     submenu.classList.add('active');
-                    menuItem.querySelector('.submenu-arrow').classList.add('rotated');
+                    arrow.classList.add('rotated');
                     isSubmenuOpen = true;
+                } else {
+                    // Second click: split functionality
+                    // If clicking on arrow, collapse menu
+                    if (e.target === arrow) {
+                        e.preventDefault();
+                        submenu.classList.remove('active');
+                        arrow.classList.remove('rotated');
+                        isSubmenuOpen = false;
+                    }
+                    // If clicking on the link itself, navigate to the page
+                    // No preventDefault() means follow href
                 }
-                // Second click: let the default link navigation happen
-                // No preventDefault() means the browser will follow the href
             });
             
-            // Reset state when menu is closed
+            // Reset state when clicking elsewhere
             document.addEventListener('click', (event) => {
                 if (!menuItem.contains(event.target) && isSubmenuOpen) {
                     isSubmenuOpen = false;
